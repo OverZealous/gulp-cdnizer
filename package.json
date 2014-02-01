@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "A plugin for Gulp",
   "keywords": [
-    "gulpplugin"
+    "gulpplugin", "cdn"
   ],
   "homepage": "https://github.com/OverZealous/gulp-cdnizer",
   "bugs": "https://github.com/OverZealous/gulp-cdnizer/issues",
