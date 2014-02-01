@@ -1,9 +1,10 @@
 {
   "name": "gulp-cdnizer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A plugin for Gulp",
   "keywords": [
-    "gulpplugin", "cdn"
+    "gulpplugin",
+    "cdn"
   ],
   "homepage": "https://github.com/OverZealous/gulp-cdnizer",
   "bugs": "https://github.com/OverZealous/gulp-cdnizer/issues",
