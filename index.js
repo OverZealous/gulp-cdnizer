@@ -79,7 +79,7 @@ module.exports = function(opts) {
 		bowerrc;
 	if(opts.bowerComponents) {
 		bowerRoot = opts.bowerComponents;
-	} else if(fs.exists('./.bowerrc')) {
+	} else if(fs.existsSync('./.bowerrc')) {
 		bowerrc = JSON.parse(require('fs').readFileSync('./.bowerrc', {encoding: 'utf8'}));
 		if(bowerrc && bowerrc.directory) {
 			bowerRoot = path.join('.', bowerrc.directory);
