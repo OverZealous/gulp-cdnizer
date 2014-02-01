@@ -1,6 +1,8 @@
 .DS_Store
 *.log
 node_modules/
+*.node
 temp/
 coverage
-.idea/workspace.xml
+.idea
+test
