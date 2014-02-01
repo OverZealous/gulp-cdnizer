@@ -185,9 +185,3 @@ The object hashmap allows for more fine-tuning of the result, using the followin
 
 [travis-url]: http://travis-ci.org/OverZealous/gulp-cdnizer
 [travis-image]: https://secure.travis-ci.org/OverZealous/gulp-cdnizer.png?branch=master
-
-[coveralls-url]: https://coveralls.io/r/OverZealous/gulp-cdnizer
-[coveralls-image]: https://coveralls.io/repos/OverZealous/gulp-cdnizer/badge.png
-
-[depstat-url]: https://david-dm.org/OverZealous/gulp-cdnizer
-[depstat-image]: https://david-dm.org/OverZealous/gulp-cdnizer.png
