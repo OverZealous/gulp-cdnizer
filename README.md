@@ -31,7 +31,7 @@ gulp.src("./src/index.html")
                     file: 'vendor/angular/angular.js',
                     package: 'angular',
                     test: 'angular',
-                    cdn: '//ajax.googleapis.com/ajax/libs/angularjs/{{version}}/angular.min.js'
+                    cdn: '//ajax.googleapis.com/ajax/libs/angularjs/${ major }.${ minor }.${ patch }/angular.min.js'
                 },
                 {
                     file: 'vendor/firebase/firebase.js',
@@ -49,7 +49,7 @@ gulp.src("./src/index.html")
                 file: 'vendor/angular/angular.js',
                 package: 'angular',
                 test: 'angular',
-                cdn: '//ajax.googleapis.com/ajax/libs/angularjs/{{version}}/angular.min.js'
+                cdn: '//ajax.googleapis.com/ajax/libs/angularjs/${ major }.${ minor }.${ patch }/angular.min.js'
             },
             {
                 file: 'vendor/firebase/firebase.js',
