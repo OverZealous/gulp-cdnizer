@@ -31,6 +31,8 @@ gulp.src("./src/index.html")
                     file: 'vendor/angular/angular.js',
                     package: 'angular',
                     test: 'angular',
+                    // angular has a bizarre version string inside bower, with extra information.
+                    // using major.minor.patch directly ensures it works with the CDN
                     cdn: '//ajax.googleapis.com/ajax/libs/angularjs/${ major }.${ minor }.${ patch }/angular.min.js'
                 },
                 {
@@ -41,15 +43,19 @@ gulp.src("./src/index.html")
             ]
         })
         .pipe(gulp.dest("./dist"));
-        
-// Alternatively, just pass in the files array if you don't need to provide any options, and only have custom files:
+```
+     
+Alternatively, you can just pass in the files array if you don't need to provide any options, and only have custom files:
+
+```js
 gulp.src("./src/index.html")
         .pipe(cdnizer([
             {
                 file: 'vendor/angular/angular.js',
                 package: 'angular',
                 test: 'angular',
-                cdn: '//ajax.googleapis.com/ajax/libs/angularjs/${ major }.${ minor }.${ patch }/angular.min.js'
+                // use altnerate providers easily
+                cdn: '//cdnjs.cloudflare.com/ajax/libs/angularjs/${ major }.${ minor }.${ patch }/angular.min.js'
             },
             {
                 file: 'vendor/firebase/firebase.js',
@@ -57,6 +63,19 @@ gulp.src("./src/index.html")
                 cdn: '//cdn.firebase.com/v0/firebase.js'
             }
         ])
+        .pipe(gulp.dest("./dist"));
+```
+
+You can also use globs to define groups of file, and dynamic filename properties:
+
+```js
+gulp.src("./src/index.html")
+        .pipe(cdnizer([{
+                file: 'vendor/angular/*.js',
+                package: 'angular',
+                test: 'angular',
+                cdn: '//ajax.googleapis.com/ajax/libs/angularjs/${ major }.${ minor }.${ patch }/${ filenameMin }'
+            }])
         .pipe(gulp.dest("./dist"));
 ```
 
@@ -78,7 +97,7 @@ Used for a default, custom CDN, usually for your own files.  This will be used i
 Type: `String`  
 Default: `'${ defaultCDNBase }/${ filepathRel }'`
 
-Used for a default, custom CDN, usually for your own files.  This will simply be prepended to the current path for a given file, unless that file has a custom `cdn` property.
+This is the default pattern used for generating CDN links when one isn't provided by a specific file. 
 
 #### options.allowRev
 Type: `Boolean`  
@@ -108,6 +127,8 @@ function cdnizerLoad(u) {
 
 Overwrite the default fallback script.  If any of the inputs has a fallback, this script is injected before the first occurence of `<link`, `<script`, or `</head>` in the HTML page.  Ignored for files that don't contain `<head`.
 
+If you already have a script loader (such as yepnope or Modernizr), you can set this to an empty string and override the `fallbackTest` below to use that instead.  Of course, this won't help if you are loading those scripts off a CDN and they fail!
+
 #### options.fallbackTest
 
 Type: `String`  
@@ -117,7 +138,7 @@ Overwrite the default fallback test.  Note that all options availble to `options
 
 #### options.bowerComponents
 
-Type: `String`
+Type: `String`  
 Default: null
 
 If provided, this is the directory to look for bower components in.  If not provided, cdnizer will attempt to look for the `.bowerrc` file, and if that is not found or does not specify a directory, it falls back to `'./bower_components'`.
@@ -131,13 +152,13 @@ Default: (none) **required**
 
 Array of sources or objects defining sources to cdnize.  Each item in the array can be one of two types, a simple glob or object hashmap.
 
-Globs are simply matched against found sources, and have the `defaultBase` prepended to them. They will not get fallbacks. 
+When using a glob, if it matches a source, the `defaultCDN` template is applied.  Because there is no `test`, the script will not have a fallback.  
 
-The object hashmap allows for more fine-tuning of the result, using the following properties:
+The object hashmap gives you full control, using the following properties:
 
 > ##### options.files[].file
 
-> Type: `String`
+> Type: `String`  
 > Default: (none) **required**
 
 > Glob to match against for the file to cdnize.  All properties within this object will be applied to all files that match the glob.  Globs are matched in a first-come, first-served basis, where only the first matched object hashmap is applied.
@@ -148,6 +169,8 @@ The object hashmap allows for more fine-tuning of the result, using the followin
 > Default: (none)
 
 > Bower package name for this source or set of sources.  By providing the package name, cdnizer will look up the version string of the *currently installed* bower package, and provide it as a property to the `cdn` string.  This is done by looking for either the `bower.json` or `.bower.json` file within your bower components directory.
+
+> The benefit of doing it this way is that the version used from the CDN *always* matches your local copy.  It won't be automatically updated to the latest patch version without being tested. 
 
 > ##### options.files[].cdn
 
