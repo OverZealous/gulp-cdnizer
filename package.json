@@ -1,7 +1,7 @@
 {
   "name": "gulp-cdnizer",
   "version": "0.2.1",
-  "description": "A plugin for Gulp",
+  "description": "A gulp plugin for replacing local links with CDN links, includes fallbacks and customization",
   "keywords": [
     "gulpplugin",
     "cdn"
