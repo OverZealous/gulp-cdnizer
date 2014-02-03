@@ -6,3 +6,8 @@ temp/
 coverage
 .idea
 test
+.bowerrc
+.travis.yml
+.gitattributes
+.editorconfig
+.jshintrc

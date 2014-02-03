@@ -77,7 +77,17 @@ describe("gulp-cdnizer", function () {
 		}, 'index-fallback.html', done);
 	});
 	
-	it("should handle bower versions", function (done) {
+	it("should handle bower versions (.bowerrc)", function (done) {
+		processInput({
+			files: [{
+				file: 'js/**/angular/angular.js',
+				package: 'angular',
+				cdn: '//ajax.googleapis.com/ajax/libs/angularjs/${ major }.${ minor }.${ patch }/angular.min.js'
+			}]
+		}, 'index-bowerrc.html', done);
+	});
+	
+	it("should handle bower versions (passed in)", function (done) {
 		processInput({
 			bowerComponents: './test/bower_components',
 			files: [{

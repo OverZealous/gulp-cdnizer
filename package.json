@@ -25,9 +25,7 @@
   "dependencies": {
     "through2": "*",
     "gulp-util": "~2.2.0",
-    "minimatch": "~0.2.14",
-    "deepmerge": "~0.2.7",
-    "lodash": "~2.4.1"
+    "cdnizer": "~0.2.1"
   },
   "devDependencies": {
     "mocha": "*",
