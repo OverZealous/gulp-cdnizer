@@ -25,7 +25,7 @@
   "dependencies": {
     "through2": "*",
     "gulp-util": "~2.2.0",
-    "cdnizer": "~0.2.1"
+    "cdnizer": "*"
   },
   "devDependencies": {
     "mocha": "*",

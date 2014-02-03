@@ -79,6 +79,18 @@ gulp.src("./src/index.html")
         .pipe(gulp.dest("./dist"));
 ```
 
+Works great on `url()`s in CSS files, too:
+
+```js
+gulp.src("./src/css/style.css")
+        .pipe(cdnizer({
+            defaultCDNBase: '//my.cdn.url/',
+            relativeRoot: 'css',
+            files: ['**/*.{gif,png,jpg,jpeg}']
+        })
+        .pipe(gulp.dest("./dist/css/"));
+```
+
 ## API
 
 ### cdnizer(options|files)
@@ -98,6 +110,15 @@ Type: `String`
 Default: `'${ defaultCDNBase }/${ filepathRel }'`
 
 This is the default pattern used for generating CDN links when one isn't provided by a specific file. 
+
+#### options.relativeRoot
+
+Type: `String`  
+Default: `''`
+
+If you are processing a file that references relative files, or is not rooted to the CDN, you can set `relativeRoot` to get correct results.
+
+For example, if you have a CSS file under `style/`, and you reference images as `../img/foo.png`, you should set `relativeRoot` to `style/`.  Now if your `defaultCDNBase` is `//example/`, the image will be resolved to `//example/img/foo.png`.  
 
 #### options.allowRev
 Type: `Boolean`  
