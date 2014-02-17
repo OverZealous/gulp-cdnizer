@@ -220,6 +220,12 @@ The object hashmap gives you full control, using the following properties:
 
 > See [`options.fallbackScript`](#optionsfallbackscript) and [`options.fallbackTest`](#optionsfallbacktest) for more information.
 
+## Help Support This Project
+
+If you'd like to support this and other OverZealous Creations (Phil DeJarnett) projects, [donate via Gittip][gittip-url]!
+
+[![Support via Gittip][gittip-image]][gittip-url]
+
 ## License
 
 [MIT License](http://en.wikipedia.org/wiki/MIT_License)
@@ -229,3 +235,6 @@ The object hashmap gives you full control, using the following properties:
 
 [travis-url]: http://travis-ci.org/OverZealous/gulp-cdnizer
 [travis-image]: https://secure.travis-ci.org/OverZealous/gulp-cdnizer.png?branch=master
+
+[gittip-url]: https://www.gittip.com/OverZealous/
+[gittip-image]: https://raw2.github.com/OverZealous/gittip-badge/0.1.2/dist/gittip.png
