@@ -41,7 +41,7 @@ gulp.src("./src/index.html")
                     cdn: '//cdn.firebase.com/v0/firebase.js'
                 }
             ]
-        })
+        }))
         .pipe(gulp.dest("./dist"));
 ```
      
@@ -62,7 +62,7 @@ gulp.src("./src/index.html")
                 test: 'Firebase',
                 cdn: '//cdn.firebase.com/v0/firebase.js'
             }
-        ])
+        ]))
         .pipe(gulp.dest("./dist"));
 ```
 
@@ -75,7 +75,7 @@ gulp.src("./src/index.html")
                 package: 'angular',
                 test: 'angular',
                 cdn: '//ajax.googleapis.com/ajax/libs/angularjs/${ major }.${ minor }.${ patch }/${ filenameMin }'
-            }])
+            }]))
         .pipe(gulp.dest("./dist"));
 ```
 
@@ -87,7 +87,7 @@ gulp.src("./src/css/style.css")
             defaultCDNBase: '//my.cdn.url/',
             relativeRoot: 'css',
             files: ['**/*.{gif,png,jpg,jpeg}']
-        })
+        }))
         .pipe(gulp.dest("./dist/css/"));
 ```
 
