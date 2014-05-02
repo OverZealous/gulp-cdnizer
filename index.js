@@ -32,7 +32,7 @@ module.exports = function(opts) {
 				file.contents = new Buffer(cdnizerHandler(String(file.contents)));
 				this.push(file);
 			} catch(error) {
-				this.emit("error", error(error.toString()))
+				this.emit("error", pluginError(error.toString()))
 			}
 		}
 		return callback();
