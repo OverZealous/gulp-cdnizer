@@ -76,6 +76,15 @@ describe("gulp-cdnizer", function () {
 			defaultCDNBase: '//examplecdn'
 		}, 'index-fallback.html', done);
 	});
+
+	it("should add min with filenameMin", function(done) {
+		processInput({
+			files: [{
+				file: 'js/**/firebase/firebase.js',
+				cdn: '//examplecdn/js/vendor/firebase/${ filenameMin }'
+			}]
+		}, 'index-filename-min.html', done);
+	});
 	
 	it("should handle bower versions (.bowerrc)", function (done) {
 		processInput({

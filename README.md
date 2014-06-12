@@ -131,7 +131,7 @@ Allow for file names with `gulp-rev` appended strings, in the form of `<file>-XX
 Type: `Boolean`  
 Default: `true`
 
-Allow for file names to have `.min` inserted before the file extension (but after rev, if enabled).  This allows you to use the base name for a file, and have `cndizer` match the minified name.
+Allow for file names that optionally have `.min` inserted before the file extension (but after rev, if enabled).  This allows you to use the base name for a file, and have `cndizer` match the minified name.
 
 #### options.fallbackScript
 
