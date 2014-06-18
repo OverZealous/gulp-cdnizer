@@ -7,6 +7,10 @@ This plugin will replace references in HTML and other files with CDN locations. 
 
 It also provides optional fallback scripts for failed file loading.  By default it can only handle failed JavaScript files, but it shouldn't be too difficult to provide a better script.
 
+> ## WARNING
+>
+> This plugin does not check incoming files.  Do not run it on files that you do not want modified.
+
 ## Usage
 
 First, install `gulp-cdnizer` as a development dependency:
