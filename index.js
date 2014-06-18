@@ -1,6 +1,7 @@
 var through = require("through2"),
 	gutil = require("gulp-util"),
-	cdnizer = require('cdnizer');
+	cdnizer = require('cdnizer'),
+    Magic = require('mmmagic').Magic;
 
 function pluginError(msg) {
 	return new gutil.PluginError("gulp-cdnizer", msg);
@@ -14,7 +15,7 @@ module.exports = function(opts) {
 
 	//noinspection JSUnusedLocalSymbols
 	function cdnizerStream(file, enc, callback) {
-
+        var magic = new Magic();
 		// Do nothing if no contents
 		if(file.isNull()) {
 			this.push(file);
@@ -28,14 +29,24 @@ module.exports = function(opts) {
 
 		// check if file.contents is a `Buffer`
 		if(file.isBuffer()) {
+            var self = this;
 			try {
-				file.contents = new Buffer(cdnizerHandler(String(file.contents)));
-				this.push(file);
+                magic.detect(file.contents, function(err, detectedType) {
+                    if (err) throw err;
+                    if (detectedType.indexOf('text') > -1) {
+                        file.contents = new Buffer(cdnizerHandler(String(file.contents)));
+                        self.push(file);
+                        return callback();
+                    }
+                    else {
+                        return callback(err, file);
+                    }
+                });
 			} catch(error) {
 				this.emit("error", pluginError(error.toString()))
 			}
 		}
-		return callback();
+
 	}
 
 	return through.obj(cdnizerStream);
