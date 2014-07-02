@@ -230,6 +230,8 @@ If you'd like to support this and other OverZealous Creations (Phil DeJarnett) p
 
 [![Support via Gittip][gittip-image]][gittip-url]
 
+You can learn a little more about me and some of the [work I do for open source projects in an article at CDNify.](https://cdnify.com/blog/overzealous-creations/)
+
 ## License
 
 [MIT License](http://en.wikipedia.org/wiki/MIT_License)
