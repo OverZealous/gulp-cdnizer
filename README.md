@@ -130,6 +130,8 @@ Default: `true`
 
 Allow for file names with `gulp-rev` appended strings, in the form of `<file>-XXXXXXXX.<ext>`.  If you are using the `gulp-rev` plugin, this will automatically match filenames that have a rev string appeneded to them.  If you are *not* using `gulp-rev`, then you can disable this by setting `allowRev` to `false`, which will prevent possible errors in accidentally matching similar file names.
 
+You can always manually configure your globs to include an optional rev string by using the form `?(<rev glob here>)`, such as `name?(-????????).ext` for appended revs.
+
 #### options.allowMin
 
 Type: `Boolean`  
@@ -223,6 +225,21 @@ The object hashmap gives you full control, using the following properties:
 > If provided, this string will be evaluated within a javascript block.  If the result is truthy, then we assume the CDN resource loaded properly.  If it isn't, then the original local file will be loaded.  This is ignored for files that don't get the [fallback script](#optionsfallbackscript).
 
 > See [`options.fallbackScript`](#optionsfallbackscript) and [`options.fallbackTest`](#optionsfallbacktest) for more information.
+
+#### options.matchers
+
+Type: `Array`  
+Default: `[]`
+
+Array of custom matchers. Use this to add extra patterns within which you would like to cdn-ize URLs, for example if you have such URLs in data-attributes. The matchers should include regular expressions with three matching groups: 1) Leading characters 2) The actual URL to work on 3) Trailing characters.
+
+Example (matches the ```data-src``` attribute in ```<img>``` tags):<br />
+```matchers: [ { pattern: /(<img\s.*?data-src=["'])(.+?)(["'].*?>)/gi, fallback: false } ]```
+
+You can also specify just a regular expression. In that case, fallback will default to false.
+
+Equivalent example:<br />
+```matchers: [ pattern: /(<img\s.*?data-src=["'])(.+?)(["'].*?>)/gi ]```
 
 ## Help Support This Project
 
