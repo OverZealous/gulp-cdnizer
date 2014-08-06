@@ -30,16 +30,16 @@ function cdnizerLoad(u) {
 …
 ```
 
-> ## WARNING
->
-> This plugin does not check incoming files.  Do not run it on files that you do not want modified.
-
 
 ### Features:
 * It's flexible without being overly complicated.
 * Handles private *and* multiple public CDNs in the same build.
 * It can use your bower installation to determine the correct file versions—no more getting "upgraded" during your build.
 * Provides optional fallback scripts for failed file loading. (By default it can only handle failed JavaScript files, but it's easy to provide a custom solution.)
+
+> ## WARNING
+>
+> This plugin does not check incoming files.  Do not run it on files that you do not want modified.
 
 
 ### New in version 1.0
@@ -75,7 +75,6 @@ npm install --save-dev gulp-cdnizer
 Then, add it to your `gulpfile.js`:
 
 ```javascript
-
 var cdnizer = require("gulp-cdnizer");
 
 gulp.src("./src/index.html")
@@ -110,7 +109,6 @@ gulp.src("./src/index.html")
 Alternatively, you can just pass in the files array if you don't need to provide any options, and only have custom files:
 
 ```js
-
 gulp.src("./src/index.html")
         .pipe(cdnizer([
             {
@@ -146,7 +144,7 @@ gulp.src("./src/index.html")
 
 ```js
 gulp.src("./src/index.html")
-        .pipe(cdnizer([{
+        .pipe(cdnizer([
 				'google:angular',          // for most libraries, that's all you'll need to do!
 				'cdnjs:jquery',
 				{
@@ -154,14 +152,13 @@ gulp.src("./src/index.html")
 					package: 'yui3',       // overriding the package name for bower, and…
 					test: 'YUI'            // providing a custom fallback test
 				}
-            }]))
+            ]))
         .pipe(gulp.dest("./dist"));
 ```
 
 Works great on `url()`s in CSS files, too:
 
 ```js
-
 gulp.src("./src/css/style.css")
         .pipe(cdnizer({
             defaultCDNBase: '//my.cdn.url/',
