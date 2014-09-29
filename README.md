@@ -91,14 +91,14 @@ gulp.src("./src/index.html")
 				{
 					file: 'vendor/angular/angular.js',
 					package: 'angular',
-					test: 'angular',
+					test: 'window.angular',
 					cdn: '//ajax.googleapis.com/ajax/libs/angularjs/${ version }/angular.min.js'
 				},
 				
 				// On Firebase's public CDN
 				{
 					file: 'vendor/firebase/firebase.js',
-					test: 'Firebase',
+					test: 'window.Firebase',
 					cdn: '//cdn.firebase.com/v0/firebase.js'
 				}
 			]
@@ -114,13 +114,13 @@ gulp.src("./src/index.html")
             {
                 file: 'vendor/angular/angular.js',
                 package: 'angular',
-                test: 'angular',
+                test: 'window.angular',
                 // use alternate providers easily
                 cdn: '//cdnjs.cloudflare.com/ajax/libs/angularjs/${ version }/angular.min.js'
             },
             {
                 file: 'vendor/firebase/firebase.js',
-                test: 'Firebase',
+                test: 'window.Firebase',
                 cdn: '//cdn.firebase.com/v0/firebase.js'
             }
         ]))
@@ -134,7 +134,7 @@ gulp.src("./src/index.html")
         .pipe(cdnizer([{
                 file: 'vendor/angular/*.js',
                 package: 'angular',
-                test: 'angular',
+                test: 'window.angular',
                 cdn: '//ajax.googleapis.com/ajax/libs/angularjs/${ version }/${ filenameMin }'
             }]))
         .pipe(gulp.dest("./dist"));
@@ -162,7 +162,7 @@ gulp.src("./src/index.html")
 				{
 					cdn: 'jsdelivr:yui',   // You can also use a known CDN, while…
 					package: 'yui3',       // overriding the package name for Bower, and…
-					test: 'YUI'            // providing a custom fallback test
+					test: 'window.YUI'     // providing a custom fallback test
 				},
 				// you can also specify alternate files within a package:
 				'jsdelivr:yui:anim-base/anim-base-min.js@3.17.2'
@@ -407,7 +407,7 @@ You can also use a common cdn while customizing the result by [using a common CD
 > {
 >     file: '**/angular/*.js',
 >     package: 'angular',
->     test: 'angular',
+>     test: 'window.angular',
 >     cdn: '//cdnjs.cloudflare.com/ajax/libs/angular.js/${ version }/${ filenameMin }'
 > }
 > ```
@@ -477,6 +477,8 @@ The object hashmap gives you full control, using the following properties:
 > Default: (none)
 
 > If provided, this string will be evaluated within a javascript block.  If the result is truthy, then we assume the CDN resource loaded properly.  If it isn't, then the original local file will be loaded.  This is ignored for files that don't get the [fallback script](#optionsfallbackscript).
+
+> This snippet will be inserted *exactly* as provided.  If the package fails to load from the CDN, the global variable won't exist, so you need to check for it's existence on an *existing* global object.  Usually this will be `window`, which you'll see through most of the examples here.
 
 > When using a common public CDN, some popular packages come with fallback tests.  The current packages that have a built-in fallback test are:
 
