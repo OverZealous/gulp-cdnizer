@@ -253,9 +253,11 @@ This is the default pattern used for generating CDN links when one isn't provide
 Type: `String`  
 Default: `''`
 
-If you are processing a file that references relative files, or is not rooted to the CDN, you can set `relativeRoot` to get correct results.
+If you are processing a file that references relative files, or is not rooted to the CDN, you **must** set `relativeRoot` to get correct results.  This relative path will be appended to the file path and the path resolved to remove relative URLs.
 
-For example, if you have a CSS file under `style/`, and you reference images as `../img/foo.png`, you should set `relativeRoot` to `style/`.  Now if your `defaultCDNBase` is `//example/`, the image will be resolved to `//example/img/foo.png`.
+For example, if you have a CSS file at `style/main.css`, and you reference images as `../img/foo.png`, you should set `relativeRoot` to `'style/'`.  Now if your `defaultCDNBase` is `//example/`, the image will be resolved to `//example/img/foo.png`.
+
+If you do *not* set `relativeRoot` when referencing relative files, your files will *not* match, and they will *not* be replaced with CDN URLs.
 
 #### options.allowRev
 Type: `Boolean`
