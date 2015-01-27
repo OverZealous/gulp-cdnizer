@@ -79,7 +79,7 @@ var cdnizer = require("gulp-cdnizer");
 
 gulp.src("./src/index.html")
         .pipe(cdnizer({
-            defaultBase: "//my.cdn.host/base",
+            defaultCDNBase: "//my.cdn.host/base",
             allowRev: true,
             allowMin: true,
             files: [
