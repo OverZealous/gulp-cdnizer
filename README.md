@@ -2,9 +2,13 @@
 
 [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url]
 
-> cdnizer plugin for [gulp](https://github.com/wearefractal/gulp)
+> [cdnizer][] plugin for [gulp](https://github.com/wearefractal/gulp)
 
 This plugin will replace local file references in HTML and other files with CDN locations.  This allows you to work with local copies of libraries during development, and then automate switching to your CDN version when you deploy your application.
+
+> ## Reporting Issues
+>
+> If you have issues with the output of this plugin that are not directly related to gulp, please report them to the [cdnizer][] library, not to the gulp plugin!
 
 For example, if you have a development file that looks like this:
 
@@ -520,6 +524,8 @@ You can learn a little more about me and some of the [work I do for open source 
 
 
 
+
+[cdnizer]: http://github.com/OverZealous/cdnizer
 
 [npm-url]: https://npmjs.org/package/gulp-cdnizer
 [npm-image]: https://badge.fury.io/js/gulp-cdnizer.png
