@@ -1,6 +1,6 @@
 # gulp-cdnizer
 
-[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url]
+[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Support via Gratipay][gratipay-image]][gratipay-url]
 
 > [cdnizer][] plugin for [gulp](https://github.com/wearefractal/gulp)
 
@@ -509,9 +509,9 @@ The object hashmap gives you full control, using the following properties:
 
 ## Help Support This Project
 
-If you'd like to support this and other OverZealous Creations (Phil DeJarnett) projects, [donate via Gittip][gittip-url]!
+If you'd like to support this and other OverZealous Creations (Phil DeJarnett) projects, [donate via Gratipay][gratipay-url]!
 
-[![Support via Gittip][gittip-image]][gittip-url]
+[![Support via Gratipay][gratipay-image]][gratipay-url]
 
 You can learn a little more about me and some of the [work I do for open source projects in an article at CDNify.](https://cdnify.com/blog/overzealous-creations/)
 
@@ -533,5 +533,5 @@ You can learn a little more about me and some of the [work I do for open source 
 [travis-url]: http://travis-ci.org/OverZealous/gulp-cdnizer
 [travis-image]: https://secure.travis-ci.org/OverZealous/gulp-cdnizer.png?branch=master
 
-[gittip-url]: https://www.gittip.com/OverZealous/
-[gittip-image]: https://raw2.github.com/OverZealous/gittip-badge/0.1.2/dist/gittip.png
+[gratipay-url]: https://www.gratipay.com/OverZealous/
+[gratipay-image]: https://img.shields.io/gratipay/OverZealous.svg
