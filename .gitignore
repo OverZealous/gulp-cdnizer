@@ -3,4 +3,4 @@
 node_modules/
 temp/
 coverage
-.idea/workspace.xml
+.idea
