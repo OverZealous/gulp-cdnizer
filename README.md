@@ -87,10 +87,10 @@ gulp.src("./src/index.html")
             allowRev: true,
             allowMin: true,
             files: [
-                             
+
 				// This file is on the default CDN, and will replaced with //my.cdn.host/base/js/app.js
 				'js/app.js',
-				
+
 				// On Google's public CDN
 				{
 					file: 'vendor/angular/angular.js',
@@ -98,7 +98,7 @@ gulp.src("./src/index.html")
 					test: 'window.angular',
 					cdn: '//ajax.googleapis.com/ajax/libs/angularjs/${ version }/angular.min.js'
 				},
-				
+
 				// On Firebase's public CDN
 				{
 					file: 'vendor/firebase/firebase.js',
@@ -109,7 +109,7 @@ gulp.src("./src/index.html")
         }))
         .pipe(gulp.dest("./dist"));
 ```
-     
+
 Alternatively, you can just pass in the files array if you don't need to provide any options, and only have custom files:
 
 ```js
@@ -228,7 +228,7 @@ gulp.src("./src/index.html")
 		* [cdn](#optionsfilescdn)
 		* [test](#optionsfilestest)
 
-	
+
 ### cdnizer( options | files )
 
 Creates a new cdnizer function that can be used to process file contents.  You can either pass in a configuration object, or you can pass in an array of files if you don't need to change the default shared options.
@@ -240,21 +240,21 @@ See [Usage](#usage) above for examples.
 
 #### options.defaultCDNBase
 
-Type: `String`  
+Type: `String`
 Default: `''` *(disabled)*
 
 Used for a default, custom CDN, usually for your own files.  This will be used in the defaultCDN property to define the default path for a CDN unless overridden.
 
 #### options.defaultCDN
 
-Type: `String`  
+Type: `String`
 Default: `'${ defaultCDNBase }/${ filepathRel }'`
 
 This is the default pattern used for generating CDN links when one isn't provided by a specific file.
 
 #### options.relativeRoot
 
-Type: `String`  
+Type: `String`
 Default: `''`
 
 If you are processing a file that references relative files, or is not rooted to the CDN, you **must** set `relativeRoot` to get correct results.  This relative path will be appended to the file path and the path resolved to remove relative URLs.
@@ -276,11 +276,11 @@ You can always manually configure your globs to include an optional rev string b
 Type: `Boolean`
 Default: `true`
 
-Allow for file names that optionally have `.min` inserted before the file extension (but after rev, if enabled).  This allows you to use the base name for a file, and have `cndizer` match the minified name.
+Allow for file names that optionally have `.min` inserted before the file extension (but after rev, if enabled).  This allows you to use the base name for a file, and have `cdnizer` match the minified name.
 
 #### options.fallbackScript
 
-Type: `String`  
+Type: `String`
 Default:
 
 ```html
@@ -297,14 +297,14 @@ If you already have a script loader (such as yepnope or Modernizr), you can set 
 
 #### options.fallbackTest
 
-Type: `String`  
+Type: `String`
 Default: `'<script>if(!(${ test })) cdnizerLoad("${ filepath }");</script>'`
 
 Overwrite the default fallback test.  Note that all options availble to `options.files[].cdn` below are available to this template as well, along with the `options.files[].test` string.
 
 #### options.bowerComponents
 
-Type: `String`  
+Type: `String`
 Default: null
 
 If provided, this is the directory to look for Bower components in.  If not provided, cdnizer will attempt to look for the `.bowerrc` file, and if that is not found or does not specify a directory, it falls back to `'./bower_components'`.
@@ -313,7 +313,7 @@ Once the directory is determined, the script will look for files in `<bowerCompo
 
 #### options.matchers
 
-Type: `Array`  
+Type: `Array`
 Default: `[]`
 
 Array of custom matchers. Use this to add extra patterns within which you would like to cdn-ize URLs, for example if you have such URLs in data-attributes. The matchers should include regular expressions with three matching groups:
@@ -352,7 +352,7 @@ Future-proof option to add additional `*-cdn-data` packages.  These packages *mu
 
 ### options.files
 
-Type: `Array`  
+Type: `Array`
 Default: (none) **required**
 
 Array of sources or objects defining sources to cdnize.  Each item in the array can be one of three types, a simple glob, a public CDN string, or object hashmap.
@@ -436,14 +436,14 @@ The object hashmap gives you full control, using the following properties:
 
 > ##### options.files[].file
 
-> Type: `String`  
+> Type: `String`
 > Default: (none) **required**
 
 > Glob to match against for the file to cdnize.  All properties within this object will be applied to all files that match the glob.  Globs are matched in a first-come, first-served basis, where only the first matched object hashmap is applied.
 
 > ##### options.files[].package
 
-> Type: `String`  
+> Type: `String`
 > Default: (none)
 
 > Bower package name for this source or set of sources.  By providing the package name, cdnizer will look up the version string of the *currently installed* Bower package, and provide it as a property to the `cdn` string.  This is done by looking for either the `bower.json` or `.bower.json` file within your Bower components directory.
@@ -452,7 +452,7 @@ The object hashmap gives you full control, using the following properties:
 
 > ##### options.files[].cdn
 
-> Type: `String`  
+> Type: `String`
 > Default: `options.defaultCDN`
 
 > This it the template for the replacement string. It can either be a custom CDN string, or it can be a common public CDN string, using the same format as a [public CDN string](#optionsfilescommon-cdn) above.
@@ -479,7 +479,7 @@ The object hashmap gives you full control, using the following properties:
 
 > ##### options.files[].test
 
-> Type: `String`  
+> Type: `String`
 > Default: (none)
 
 > If provided, this string will be evaluated within a javascript block.  If the result is truthy, then we assume the CDN resource loaded properly.  If it isn't, then the original local file will be loaded.  This is ignored for files that don't get the [fallback script](#optionsfallbackscript).
