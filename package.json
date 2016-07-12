@@ -25,7 +25,7 @@
   "dependencies": {
     "through2": "^0.5.1",
     "gulp-util": "^3.0.0",
-    "cdnizer": "^1.1.4"
+    "cdnizer": "^1.1.6"
   },
   "devDependencies": {
     "mocha": "*",
@@ -39,5 +39,5 @@
     "node": ">=0.8.0",
     "npm": ">=1.2.10"
   },
-  "licenses": "MIT"
+  "license": "MIT"
 }
