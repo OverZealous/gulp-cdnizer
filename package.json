@@ -25,14 +25,14 @@
   "dependencies": {
     "through2": "^0.5.1",
     "gulp-util": "^3.0.0",
-    "cdnizer": "^1.1.6"
+    "cdnizer": "^2.0.0"
   },
   "devDependencies": {
-    "mocha": "*",
-    "coveralls": "*",
-    "mocha-lcov-reporter": "*",
-    "istanbul": "*",
-    "event-stream": "*",
+    "mocha": "^5.0.1",
+    "coveralls": "^3.0.0",
+    "mocha-lcov-reporter": "^1.3.0",
+    "istanbul": "^0.4.5",
+    "event-stream": "^3.3.4",
     "should": "~2.1.0"
   },
   "engines": {

@@ -1,6 +1,6 @@
-var through = require("through2"),
-	gutil = require("gulp-util"),
-	cdnizer = require('cdnizer');
+var through = require("through2");
+var gutil = require("gulp-util");
+var cdnizer = require('cdnizer');
 
 function pluginError(msg) {
 	return new gutil.PluginError("gulp-cdnizer", msg);
@@ -8,7 +8,7 @@ function pluginError(msg) {
 
 module.exports = function(opts) {
 	"use strict";
-	
+
 	var cdnizerHandler = cdnizer(opts);
 
 

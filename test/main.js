@@ -1,73 +1,74 @@
 /*global describe, it*/
 "use strict";
 
-var fs = require("fs"),
-	es = require("event-stream"),
-	should = require("should");
+var fs = require("fs");
+var es = require("event-stream");
+var should = require("should");
 
 require("mocha");
 
 delete require.cache[require.resolve("../")];
 
-var gutil = require("gulp-util"),
-	cdnizer = require("../"),
-	loadFile = function(name) {
-		return new gutil.File({
-			path: "test/expected/"+name,
-			cwd: "test/",
-			base: "test/expected",
-			contents: fs.readFileSync("test/expected/"+name)
-		})
-	};
+var gutil = require("gulp-util");
+var cdnizer = require("../");
+var loadFile = function(name) {
+	return new gutil.File({
+		path: "test/expected/" + name,
+		cwd: "test/",
+		base: "test/expected",
+		contents: fs.readFileSync("test/expected/" + name)
+	})
+};
 
-describe("gulp-cdnizer", function () {
+function processInput(opts, expectedFileName, done) {
+	var stream = cdnizer(opts);
+	var srcFile = new gutil.File({
+		path: "test/fixtures/index.html",
+		cwd: "test/",
+		base: "test/fixtures",
+		contents: fs.readFileSync("test/fixtures/index.html")
+	});
 
-	var processInput = function(opts, expectedFileName, done) {
-			var stream = cdnizer(opts),
-				srcFile = new gutil.File({
-					path: "test/fixtures/index.html",
-					cwd: "test/",
-					base: "test/fixtures",
-					contents: fs.readFileSync("test/fixtures/index.html")
-				});
-	
-			stream.on("error", function(err) {
-				should.not.exist(err);
-				done(err);
-			});
-	
-			stream.on("data", function (newFile) {
-	
-				should.exist(newFile);
-				should.exist(newFile.contents);
-	
-				String(newFile.contents).should.equal(String(loadFile(expectedFileName).contents));
-				done();
-			});
-	
-			stream.write(srcFile);
-			stream.end();
-		};
-	
-	it("should not modify a file if no matches", function (done) {
+	stream.on("error", function(err) {
+		should.not.exist(err);
+		done(err);
+	});
+
+	stream.on("data", function(newFile) {
+
+		should.exist(newFile);
+		should.exist(newFile.contents);
+
+		String(newFile.contents).should.equal(String(loadFile(expectedFileName).contents));
+		done();
+	});
+
+	stream.write(srcFile);
+	stream.end();
+}
+
+describe("gulp-cdnizer", function() {
+
+	it("should not modify a file if no matches", function(done) {
 		processInput(['/no/match'], 'index-none.html', done);
 	});
-	
-	it("should modify on basic input", function (done) {
+
+	it("should modify on basic input", function(done) {
 		processInput({
+			allowRev: true,
 			files: ['css/main.css', 'js/**/*.js'],
 			defaultCDNBase: '//examplecdn/'
 		}, 'index-generic.html', done);
 	});
-	
-	it("should handle varied input", function (done) {
+
+	it("should handle varied input", function(done) {
 		processInput({
 			files: ['css/*.css', 'js/**/*.js'],
 			defaultCDNBase: '//examplecdn'
 		}, 'index-generic.html', done);
 	});
-	
-	it("should handle min and fallbacks", function (done) {
+
+	it("should handle min and fallbacks", function(done) {
 		processInput({
 			files: [{
 				file: 'js/**/angular/angular.js',
@@ -85,8 +86,8 @@ describe("gulp-cdnizer", function () {
 			}]
 		}, 'index-filename-min.html', done);
 	});
-	
-	it("should handle bower versions (.bowerrc)", function (done) {
+
+	it("should handle bower versions (.bowerrc)", function(done) {
 		processInput({
 			files: [{
 				file: 'js/**/angular/angular.js',
@@ -95,10 +96,10 @@ describe("gulp-cdnizer", function () {
 			}]
 		}, 'index-bowerrc.html', done);
 	});
-	
-	it("should handle bower versions (passed in)", function (done) {
+
+	it("should handle bower versions (passed in)", function(done) {
 		processInput({
-			bowerComponents: './test/bower_components',
+			bowerComponents: './test/fixtures/bower_components',
 			files: [{
 				file: 'js/**/angular/angular.js',
 				package: 'angular',
@@ -107,10 +108,10 @@ describe("gulp-cdnizer", function () {
 		}, 'index-bower.html', done);
 	});
 
-	it("should error on stream", function (done) {
+	it("should error on stream", function(done) {
 
 		var stream = cdnizer(['foo/bar']);
-		
+
 		var srcFileStream = new gutil.File({
 			path: "test/fixtures/index.html",
 			cwd: "test/",
@@ -123,7 +124,7 @@ describe("gulp-cdnizer", function () {
 			done();
 		});
 
-		stream.on("data", function (newFile) {
+		stream.on("data", function(newFile) {
 			newFile.contents.pipe(es.wait(function(err, data) {
 				done(err);
 			}));

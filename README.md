@@ -38,7 +38,7 @@ function cdnizerLoad(u) {
 ### Features:
 * It's flexible without being overly complicated.
 * Handles private *and* multiple public CDNs in the same build.
-* It can use your Bower installation to determine the correct file versions—no more getting "upgraded" during your build.
+* It can use your Bower or NPM installation to determine the correct file versions—no more getting "upgraded" during your build.
 * Provides optional fallback scripts for failed file loading. (By default it can only handle failed JavaScript files, but it's easy to provide a custom solution.)
 
 > ## WARNING
@@ -46,12 +46,18 @@ function cdnizerLoad(u) {
 > This plugin does not check incoming files.  Do not run it on files that you do not want modified.
 
 
+### New & Breaking in version 2.0
+
+- Support for Node Modules, which is the new default mode
+- If you have the same module in both `node_modules` and `bower_components`, and you don't want to use `node_modules`, you'll need to set the `nodeModules` property to `false` in the general config, or set `ignoreNodeModules` to `true` in the per-package config.
+- Some default settings have changed, namely `allowRev` is turned off by default, since it causes too many unexpected errors.
+
 ### New in version 1.0
 
 cdnizer now can load CDN data from existing `*-cdn-data` packages, currently `google-cdn-data`, `cdnjs-cdn-data`, and `jsdelivr-cdn-data`.  Now you can [configure common public CDNs with a single line](#optionsfilescommon-cdn)!
 
 
-### Possible breaking change in 1.0
+**Possible breaking change in 1.0**
 
 The `version` field has been changed in this release.  Previously, it was the exact version as it existing within Bower.  Now, `version` is the string `major(.minor)?(.patch)?`, with any trailing (`-beta*`, `-snapshot*`, etc) information removed.  (Alpha-numeric characters that are attached to the version string, as in `1.0.0rc1`, are not stripped.)
 
@@ -63,7 +69,7 @@ You can still access the full version string via `versionFull`, which is not mod
 
 * [Usage](#usage)
 * [API](#api)
-* [Support This Project](#help-support-this-project)
+* [About This Project](#about-this-project)
 * [License](#license)
 
 
@@ -216,6 +222,7 @@ gulp.src("./src/index.html")
 	* [allowMin](#optionsallowmin)
 	* [fallbackScript](#optionsfallbackscript)
 	* [fallbackTest](#optionsfallbacktest)
+	* [nodeModules](#optionsnodemodules)
 	* [bowerComponents](#optionsbowercomponents)
 	* [matchers](#optionsmatchers)
 	* [cdnDataLibraries](#optionscdndatalibraries)
@@ -225,10 +232,11 @@ gulp.src("./src/index.html")
 	* [Type: custom hashmap](#optionsfileshashmap)
 		* [file](#optionsfilesfile)
 		* [package](#optionsfilespackage)
+		* [ignoreNodeModules](#optionsfilesignorenodemodules)
 		* [cdn](#optionsfilescdn)
 		* [test](#optionsfilestest)
 
-
+	
 ### cdnizer( options | files )
 
 Creates a new cdnizer function that can be used to process file contents.  You can either pass in a configuration object, or you can pass in an array of files if you don't need to change the default shared options.
@@ -240,21 +248,21 @@ See [Usage](#usage) above for examples.
 
 #### options.defaultCDNBase
 
-Type: `String`
+Type: `String`  
 Default: `''` *(disabled)*
 
 Used for a default, custom CDN, usually for your own files.  This will be used in the defaultCDN property to define the default path for a CDN unless overridden.
 
 #### options.defaultCDN
 
-Type: `String`
+Type: `String`  
 Default: `'${ defaultCDNBase }/${ filepathRel }'`
 
 This is the default pattern used for generating CDN links when one isn't provided by a specific file.
 
 #### options.relativeRoot
 
-Type: `String`
+Type: `String`  
 Default: `''`
 
 If you are processing a file that references relative files, or is not rooted to the CDN, you **must** set `relativeRoot` to get correct results.  This relative path will be appended to the file path and the path resolved to remove relative URLs.
@@ -264,8 +272,8 @@ For example, if you have a CSS file at `style/main.css`, and you reference image
 If you do *not* set `relativeRoot` when referencing relative files, your files will *not* match, and they will *not* be replaced with CDN URLs.
 
 #### options.allowRev
-Type: `Boolean`
-Default: `true`
+Type: `Boolean`  
+Default: `false`
 
 Allow for file names with `gulp-rev` appended strings, in the form of `<file>-XXXXXXXX.<ext>`.  If you are using the `gulp-rev` plugin, this will automatically match filenames that have a rev string appeneded to them.  If you are *not* using `gulp-rev`, then you can disable this by setting `allowRev` to `false`, which will prevent possible errors in accidentally matching similar file names.
 
@@ -273,14 +281,14 @@ You can always manually configure your globs to include an optional rev string b
 
 #### options.allowMin
 
-Type: `Boolean`
-Default: `true`
+Type: `Boolean`  
+Default: `false`
 
-Allow for file names that optionally have `.min` inserted before the file extension (but after rev, if enabled).  This allows you to use the base name for a file, and have `cdnizer` match the minified name.
+Allow for file names that optionally have `.min` inserted before the file extension (but after rev, if enabled).  This allows you to use the base name for a file, and have `cndizer` match the minified name.
 
 #### options.fallbackScript
 
-Type: `String`
+Type: `String`  
 Default:
 
 ```html
@@ -297,23 +305,34 @@ If you already have a script loader (such as yepnope or Modernizr), you can set 
 
 #### options.fallbackTest
 
-Type: `String`
+Type: `String`  
 Default: `'<script>if(!(${ test })) cdnizerLoad("${ filepath }");</script>'`
 
 Overwrite the default fallback test.  Note that all options availble to `options.files[].cdn` below are available to this template as well, along with the `options.files[].test` string.
 
-#### options.bowerComponents
+#### options.nodeModules
 
-Type: `String`
+Type: `String|Boolean`  
 Default: null
 
-If provided, this is the directory to look for Bower components in.  If not provided, cdnizer will attempt to look for the `.bowerrc` file, and if that is not found or does not specify a directory, it falls back to `'./bower_components'`.
+If provided, this is the directory to look for node modules in. If not provided, and there's no existing `bower` configuration, cdnizer will fall back to `node_modules`.
+
+If this is set to `false`, it will not look in `node_modules` at all.
+
+Once the directory is determined, the script will look for files in `<nodeModules>/<package>/package.json` to try to determine the version of the installed component.
+
+#### options.bowerComponents
+
+Type: `String`  
+Default: null
+
+If provided, this is the directory to look for Bower components in.  If not provided, cdnizer will attempt to look for the `.bowerrc` file, and if that is not found or does not specify a directory, it falls back to `'./bower_components'`. If that's not found, cdnizer falls back to `node_modules`.
 
 Once the directory is determined, the script will look for files in `<bowerComponents>/bower.json` or `<bowerComponents>/.bower.json` to try to determine the version of the installed component.
 
 #### options.matchers
 
-Type: `Array`
+Type: `Array`  
 Default: `[]`
 
 Array of custom matchers. Use this to add extra patterns within which you would like to cdn-ize URLs, for example if you have such URLs in data-attributes. The matchers should include regular expressions with three matching groups:
@@ -352,7 +371,7 @@ Future-proof option to add additional `*-cdn-data` packages.  These packages *mu
 
 ### options.files
 
-Type: `Array`
+Type: `Array`  
 Default: (none) **required**
 
 Array of sources or objects defining sources to cdnize.  Each item in the array can be one of three types, a simple glob, a public CDN string, or object hashmap.
@@ -436,23 +455,30 @@ The object hashmap gives you full control, using the following properties:
 
 > ##### options.files[].file
 
-> Type: `String`
+> Type: `String`  
 > Default: (none) **required**
 
 > Glob to match against for the file to cdnize.  All properties within this object will be applied to all files that match the glob.  Globs are matched in a first-come, first-served basis, where only the first matched object hashmap is applied.
 
 > ##### options.files[].package
 
-> Type: `String`
+> Type: `String`  
 > Default: (none)
 
 > Bower package name for this source or set of sources.  By providing the package name, cdnizer will look up the version string of the *currently installed* Bower package, and provide it as a property to the `cdn` string.  This is done by looking for either the `bower.json` or `.bower.json` file within your Bower components directory.
 
 > The benefit of doing it this way is that the version used from the CDN *always* matches your local copy.  It will never automatically be updated to a newer patch version without being tested.
 
+> ##### options.files[].ignoreNodeModules
+
+> Type: `boolean`  
+> Default: (none)
+
+> If provided, and set to `true`, this prevents looking in the `node_modules` directory for matching packages. Should only be needed if you have the same package in both `node_modules` and `bower_components`, and need to use the bower copy for version info.
+
 > ##### options.files[].cdn
 
-> Type: `String`
+> Type: `String`  
 > Default: `options.defaultCDN`
 
 > This it the template for the replacement string. It can either be a custom CDN string, or it can be a common public CDN string, using the same format as a [public CDN string](#optionsfilescommon-cdn) above.
@@ -479,12 +505,12 @@ The object hashmap gives you full control, using the following properties:
 
 > ##### options.files[].test
 
-> Type: `String`
+> Type: `String`  
 > Default: (none)
 
 > If provided, this string will be evaluated within a javascript block.  If the result is truthy, then we assume the CDN resource loaded properly.  If it isn't, then the original local file will be loaded.  This is ignored for files that don't get the [fallback script](#optionsfallbackscript).
 
-> This snippet will be inserted *exactly* as provided.  If the package fails to load from the CDN, the global variable won't exist, so you need to check for it's existence on an *existing* global object.  Usually this will be `window`, which you'll see through most of the examples here.
+> This snippet will be inserted *exactly* as provided.  If the package fails to load from the CDN, the global variable won't exist, so you need to check for it's existence on an *existing* global object.  Usually this will be `window`, which you'll see through most of the examples here.  
 
 > When using a common public CDN, some popular packages come with fallback tests.  The current packages that have a built-in fallback test are:
 
@@ -507,11 +533,7 @@ The object hashmap gives you full control, using the following properties:
 
 
 
-## Help Support This Project
-
-If you'd like to support this and other OverZealous Creations (Phil DeJarnett) projects, [donate via Gratipay][gratipay-url]!
-
-[![Support via Gratipay][gratipay-image]][gratipay-url]
+## About this Project
 
 You can learn a little more about me and some of the [work I do for open source projects in an article at CDNify.](https://cdnify.com/blog/overzealous-creations/)
 
