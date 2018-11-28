@@ -1,6 +1,6 @@
 {
   "name": "gulp-cdnizer",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A gulp plugin for replacing local links with CDN links, includes fallbacks and customization",
   "keywords": [
     "gulpplugin",
@@ -23,9 +23,9 @@
     "coveralls": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "dependencies": {
-    "through2": "^0.5.1",
+    "cdnizer": "^3.0.1",
     "gulp-util": "^3.0.0",
-    "cdnizer": "^2.0.0"
+    "through2": "^0.5.1"
   },
   "devDependencies": {
     "mocha": "^5.0.1",
