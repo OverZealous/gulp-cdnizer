@@ -21,7 +21,7 @@ For example, if you have a development file that looks like this:
 
 You can use cdnizer to automatically convert it to this during your build process (*every* change here can be customized):
 
-```js
+```html
 <html>
 <head>
 <script>
@@ -84,7 +84,7 @@ npm install --save-dev gulp-cdnizer
 
 Then, add it to your `gulpfile.js`:
 
-```javascript
+```js
 var cdnizer = require("gulp-cdnizer");
 
 gulp.src("./src/index.html")
@@ -226,6 +226,7 @@ gulp.src("./src/index.html")
 	* [bowerComponents](#optionsbowercomponents)
 	* [matchers](#optionsmatchers)
 	* [cdnDataLibraries](#optionscdndatalibraries)
+	* [excludeAbsolute](#optionsexcludeabsolute)
 * [Files Array](#optionsfiles)
 	* [Type: glob](#optionsfilesglob)
 	* [Type: common public cdn](#optionsfilescommon-cdn)
@@ -367,6 +368,55 @@ Type: `Array`
 Default: `[]`
 
 Future-proof option to add additional `*-cdn-data` packages.  These packages *must* be in the same format as [`google-cdn-data`](https://www.npmjs.org/package/google-cdn-data).  The format is to only include the leading part of the package name, for example, `cdnjs-cdn-data` would be included as simply `'cdnjs'`.
+
+#### options.excludeAbsolute
+
+Type: `Boolean`
+Default: `false`
+
+In [some cases](https://github.com/OverZealous/cdnizer/issues/21) you may have third party of vendor libraries already loaded off a CDN or remote URL that you don't want re-written.  
+
+For example given a config like this
+```js
+cdnizer({
+	files: ['**/*.js', '**/*.css'],
+	defaultCDNBase: '//examplecdn/',
+	excludeAbsolute: true
+});
+```
+
+And an _index.html_ like this
+```html
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+	</head>
+	<body>
+	<h1>Hello World</h1>
+	<script src="js/app/app.js"></script>
+	</body>
+</html>
+```
+
+With this flag enabled `cdnizer` will avoid re-writing these kind of paths.
+```html
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<!-- path has not changed -->
+		<link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+	</head>
+	<body>
+	<h1>Hello World</h1>
+		<script src="//examplecdn/js/app/app.js"></script> <!-- has the expected CDN base path -->
+	</body>
+</html>
+```
 
 
 ### options.files
